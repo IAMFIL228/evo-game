@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>EVO — жизнь как игра</title>
+  <meta name="description" content="Игра-трекер против прокрастинации. Прокачивай аватара, копи ХП и баллы, меняй их на реальные награды.">
+  <meta name="theme-color" content="#0a0c12">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="EVO">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="pages" id="pages">
+
+    <!-- ==================== 1. АВАТАР ==================== -->
+    <section class="page" id="page-home">
+      <header class="page-head">
+        <div class="ph-left">
+          <h1 id="avName">Эво</h1>
+          <p class="stage-line" id="avStage">—</p>
+        </div>
+        <div class="chip coins-chip" id="coinsChip">💰 0</div>
+      </header>
+
+      <div class="card lvl-card">
+        <div class="lvl-top">
+          <span class="lvl-badge">LVL <b id="lvlNum">0</b></span>
+          <span class="lvl-note">7 форм · каждая — новый кот</span>
+        </div>
+        <div class="lvl-track" id="lvlTrack">
+          <div class="lvl-fill" id="lvlFill"></div>
+        </div>
+        <div class="xp-top">
+          <span class="xp-lbl">⚡ XP</span>
+          <span class="xp-num" id="xpNum">0/100</span>
+        </div>
+        <div class="xp-bar">
+          <div class="xp-fill" id="xpFill"></div>
+        </div>
+        <p class="hint" style="margin:8px 0 0">Каждые 20 XP — +1 LVL. 7 форм кота до LVL 100. Срывы отнимают XP — вплоть до отката формы.</p>
+      </div>
+
+      <div class="avatar-stage" id="avatarBox">
+        <div class="avatar-glow" id="avatarGlow"></div>
+        <div class="hang"><img id="avatarImg" alt="Аватар" draggable="false"></div>
+        <div class="floor-shadow"></div>
+      </div>
+
+      <div class="card today-card">
+        <div class="today-line" id="todayLine">—</div>
+        <div class="today-sub" id="todaySub">—</div>
+      </div>
+
+      <div class="card feed-card">
+        <h3 class="card-title">Хроника</h3>
+        <ul class="feed" id="feed"></ul>
+      </div>
+    </section>
+
+    <!-- ==================== 2. ДЕЛА ==================== -->
+    <section class="page" id="page-deeds">
+      <header class="page-head">
+        <div class="ph-left">
+          <h1>Дела</h1>
+          <p class="stage-line">Серийные и спонтанные</p>
+        </div>
+        <div class="chip coins-chip" id="coinsChip2">💰 0</div>
+      </header>
+
+      <div class="card week-card">
+        <div class="week-top">
+          <span>🎯 Неделя: <b id="weekNum">0/10</b> дел</span>
+          <span class="week-prize" id="weekPrize">приз 20 💰</span>
+        </div>
+        <div class="goal-bar"><div class="goal-fill" id="weekFill"></div></div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Серийные дела</h3>
+        <p class="hint">Ежедневные привычки. Пропустил — теряешь серию и ХП. Выполнено сегодня — жми ещё раз, чтобы отменить.</p>
+        <div id="deedList" class="deed-list"></div>
+        <form id="deedForm" class="add-form" autocomplete="off">
+          <input id="deedEmoji" placeholder="😎" maxlength="4" title="Эмодзи">
+          <input id="deedName" placeholder="Новое дело (спорт, чтение…)" maxlength="30" required>
+          <input id="deedPrice" placeholder="💰10" type="number" min="1" max="100" title="Цена дела в баллах">
+          <button type="submit" class="btn accent">＋</button>
+        </form>
+        <div class="day-row" id="deedDays">
+          <button type="button" class="day-btn on" data-d="1">Пн</button>
+          <button type="button" class="day-btn on" data-d="2">Вт</button>
+          <button type="button" class="day-btn on" data-d="3">Ср</button>
+          <button type="button" class="day-btn on" data-d="4">Чт</button>
+          <button type="button" class="day-btn on" data-d="5">Пт</button>
+          <button type="button" class="day-btn on" data-d="6">Сб</button>
+          <button type="button" class="day-btn on" data-d="0">Вс</button>
+        </div>
+        <p class="hint" id="deedHint">Дело даёт +5 XP и 💰 — цену назначаешь ты (по умолчанию 10). Дни выше — когда дело обязательно: в остальных серия спит и не ломается. Максимум 12 дел.</p>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Спонтанные дела</h3>
+        <p class="hint">Сделал что-то полезное вне списка — запиши. +3 XP и +5 💰 за первые 5 записей в день, дальше — просто история.</p>
+        <form id="spontForm" class="add-form" autocomplete="off">
+          <input id="spontName" placeholder="Что сделал? (вымыл посуду, 10 отжиманий…)" maxlength="60" required>
+          <button type="submit" class="btn accent">＋</button>
+        </form>
+        <p class="hint" id="spontLeft" style="margin:8px 0 0"></p>
+        <div id="spontList" class="spont-list"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 3. МАГАЗИН ==================== -->
+    <section class="page" id="page-shop">
+      <header class="page-head">
+        <div class="ph-left">
+          <h1>Магазин</h1>
+          <p class="stage-line">Потрать заслуженное</p>
+        </div>
+        <div class="chip coins-chip big" id="coinsChip3">💰 0</div>
+      </header>
+
+      <div class="card">
+        <h3 class="card-title">Артефакты</h3>
+        <div class="hint" id="invLine">Инвентарь: щитов 0/3</div>
+        <div id="artifacts" class="shop-list"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Награды</h3>
+        <div class="goal-box hidden" id="goalBox"></div>
+        <p class="hint">Твои реальные радости за баллы, разложены по категориям с минимальной ценой. 💭 Мечта — большие цели (поездка, техника): за монеты не продаются, копятся в реальных деньгах на экране «Мечты». Отметь 🎯 у награды, чтобы копить именно на неё.</p>
+        <div id="shopList" class="shop-list"></div>
+        <form id="shopForm" class="add-form wrap" autocomplete="off">
+          <select id="shopCat" title="Категория награды"></select>
+          <input id="shopEmoji" placeholder="🎁" maxlength="4" title="Эмодзи">
+          <input id="shopName" placeholder="Награда (кино, пицца…)" maxlength="30" required>
+          <input id="shopPrice" placeholder="💰" type="number" min="1" max="99999999" required>
+          <button type="submit" class="btn accent">＋</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Куплено</h3>
+        <div id="purchases" class="purch-list"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. МЕЧТЫ ==================== -->
+    <section class="page" id="page-dreams">
+      <header class="page-head">
+        <div class="ph-left">
+          <h1>Мечты</h1>
+          <p class="stage-line">Финансовый контроль · реальные деньги</p>
+        </div>
+      </header>
+
+      <div class="card">
+        <div class="dream-total" id="dreamTotal">0 ₽</div>
+        <div class="dream-total-sub" id="dreamTotalSub">добавь первую мечту — форма ниже</div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Копилки</h3>
+        <p class="hint">Путешествие, машина, своя техника — большие цели копятся в рублях, монеты их не покупают. Вноси пополнения и смотри прогресс. Монеты — для наград поменьше.</p>
+        <div id="dreamList" class="dream-list"></div>
+        <form id="dreamForm" class="add-form" autocomplete="off">
+          <input id="dreamEmoji" placeholder="🏝️" maxlength="4" title="Эмодзи">
+          <input id="dreamName" placeholder="Мечта (Япония, машина…)" maxlength="30" required>
+          <input id="dreamTarget" placeholder="₽ цель" type="number" min="1" max="999999999" required title="Цель в рублях">
+          <button type="submit" class="btn accent">＋</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ==================== 5. ПРОФИЛЬ ==================== -->
+    <section class="page" id="page-profile">
+      <header class="page-head">
+        <div class="ph-left">
+          <h1>Профиль</h1>
+          <p class="stage-line" id="profSub">—</p>
+        </div>
+      </header>
+
+      <div class="stats-row">
+        <div class="stat"><div class="stat-num" id="stDays">0</div><div class="stat-lbl">дней в игре</div></div>
+        <div class="stat"><div class="stat-num" id="stDeeds">0</div><div class="stat-lbl">дел сделано</div></div>
+        <div class="stat"><div class="stat-num" id="stMaxStreak">0</div><div class="stat-lbl">макс. серия</div></div>
+        <div class="stat"><div class="stat-num" id="stSpent">0</div><div class="stat-lbl">💰 потрачено</div></div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Достижения</h3>
+        <p class="hint" id="achCount" style="margin:0 0 8px"></p>
+        <div id="achGrid" class="ach-grid"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Дела за 14 дней</h3>
+        <div class="stat-bars" id="statsBars"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Зал эволюции</h3>
+        <p class="hint">Будущие формы скрыты — откроются по уровням. Зал хранит историю: форму можно потерять при срыве и вернуть делами.</p>
+        <div id="evoGallery" class="evo-gallery"></div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">Настройки</h3>
+        <div class="settings">
+          <button id="installBtn" class="btn ghost wide hidden">📲 Установить приложение</button>
+          <p class="hint hidden" id="iosHint">📱 iPhone: в Safari нажми «Поделиться» → «На экран “Домой”» — EVO появится иконкой и будет запускаться как приложение.</p>
+          <label class="switch-label">
+            <input type="checkbox" id="notifToggle">
+            <span class="switch"></span>
+            <span id="notifLabel">Напоминать, если дела не сделаны</span>
+          </label>
+          <div class="setting-row">
+            <span>Время напоминания:</span>
+            <input type="time" id="notifTime" value="21:00">
+          </div>
+          <div class="btn-row">
+            <button id="exportBtn" class="btn ghost">Экспорт</button>
+            <button id="importBtn" class="btn ghost">Импорт</button>
+            <button id="resetBtn" class="btn danger">Сброс</button>
+          </div>
+          <input type="file" id="importFile" accept=".json" class="hidden">
+          <p class="hint hidden" id="exportHint"></p>
+          <p class="hint">Данные живут только в этом браузере. Регулярно делай экспорт.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- точки-переключатели -->
+  <nav class="dots" id="dots">
+    <button class="dot active" data-i="0" title="Аватар"></button>
+    <button class="dot" data-i="1" title="Дела"></button>
+    <button class="dot" data-i="2" title="Магазин"></button>
+    <button class="dot" data-i="3" title="Мечты"></button>
+    <button class="dot" data-i="4" title="Профиль"></button>
+  </nav>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <!-- онбординг -->
+  <div class="overlay hidden" id="onboard">
+    <div class="onboard-card">
+      <h2>Добро пожаловать в EVO</h2>
+      <p class="hint">Жизнь — это игра. Дела прокачивают твоего аватара, прокрастинация — ослабляет. Начнём с героя.</p>
+      <form id="onboardForm" autocomplete="off">
+        <div class="onboard-stage">
+          <div class="onboard-glow"></div>
+          <div class="onboard-hang"><img src="design/ai/cat-1.png" alt="" draggable="false"></div>
+          <div class="onboard-floor"></div>
+        </div>
+        <input id="onboardName" placeholder="Имя аватара" maxlength="16" value="Эво" required>
+        <button type="submit" class="btn accent wide">Начать игру</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# внутренние заметки разработки
+PROJECT_MAP.md
+
+# личные исходники и шаблоны (в репозитории только итоговые аватары design/ai/cat-*.png)
+*.jpg
+*.webp
+*.jfif
+1.1.PNG
+7.1.PNG
+*.xlsx
+
+# архив старых аватаров «парень/девушка» и утилиты их изготовления
+design/avatars.html
+design/ai/gallery.html
+design/ai/*.py
+design/ai/__pycache__/
+design/ai/ai-*.png
+design/ai/p1-*.png
+design/ai/p2-*.png
+design/ai/p3-*.png
+design/ai/p4-*.png
+design/ai/uy*.png
+design/ai/pair-*.png
+design/ai/demo-*.png
+
+# служебное
+Thumbs.db
+.DS_Store
+node_modules/
